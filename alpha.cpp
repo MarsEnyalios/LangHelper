@@ -17,10 +17,26 @@ using std::cout; using std::cin; using std::endl;
 Alpha :: Alpha()
 {
    categories['S'].push_back("cvc");
-/*
-   map<char, vector<string> > const temp {
-      { 'S', { "cvc", "vcv", "cvcc", "vvc", "ccv"} },
-      { 'C', { "k", "m", "n", "p", "q", "t" } },
-      { 'V', { "a", "e", "i", "o", "u"} }
-   };*/
+   categories['S'].push_back("vcv");
+   categories['S'].push_back("cvcc");
+   categories['S'].push_back("vvc");
+   categories['S'].push_back("ccv");
+
+   categories['C'].push_back("k");
+   categories['C'].push_back("m");
+   categories['C'].push_back("n");
+   categories['C'].push_back("p");
+   categories['C'].push_back("q");
+   categories['C'].push_back("t");
+
+   categories['V'].push_back("a");
+   categories['V'].push_back("e");
+   categories['V'].push_back("i");
+   categories['V'].push_back("o");
+   categories['V'].push_back("u");
+}
+
+Alpha :: Alpha(map<char, vector<string> > categories)
+{
+   this->categories = categories; 
 }

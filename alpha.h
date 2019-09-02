@@ -23,7 +23,7 @@ private:
    map<char, vector<string> > categories;
 public:
    Alpha(); 
-      Alpha(map<char, vector<string> > cat);
+   Alpha(map<char, vector<string> > categories);
 
    map<char, vector<string> > getCategories(); // return entire map
    map<char, vector<string> >::iterator getCategory(char key); // returns one category
