@@ -28,7 +28,7 @@ public:
    map<char, vector<string> > getCategories(); // return entire map
    map<char, vector<string> >::iterator getCategory(char key); // returns one category
 
-   bool addCategory(char name, vector<string> category); // use map insert
+   void addCategory(char name, vector<string> category); // use map insert
 
    /* instead of having a separate member function for syllables, just use this &
     * pass S. Use map [] operator.*/

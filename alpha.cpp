@@ -40,3 +40,66 @@ Alpha :: Alpha(map<char, vector<string> > categories)
 {
    this->categories = categories; 
 }
+
+map<char, vector<string> > Alpha :: getCategories()
+{
+   return categories; 
+}
+
+map<char, vector<string> >::iterator Alpha :: getCategory(char key)
+{
+   map<char, vector<string> >::iterator it = categories.find(key); 
+
+   return it;
+}
+
+void Alpha :: addCategory(char key, vector<string> category)
+{
+   categories.insert(std::pair<char, vector<string> >(key, category));
+}
+
+void Alpha :: changeCategory(char key, vector<string> category)
+{
+   categories[key] = category;
+}
+
+void Alpha :: deleteCategory(char key)
+{
+   categories.erase(key);
+}
+
+void Alpha :: display()
+{
+   map<char, vector<string> >::iterator mapIt;
+   vector<string>::iterator vecIt;
+
+   for (mapIt = categories.begin(); mapIt != categories.end(); ++mapIt)
+   {
+      cout << mapIt->first << ':' << ' ';
+
+      for (vecIt = mapIt->second.begin(); vecIt != mapIt->second.end(); ++vecIt)
+         cout << *vecIt << ' ';
+
+      cout << endl; 
+   }
+}
+
+ostream& operator<<(ostream& os, Alpha& alpha)
+{
+   map<char, vector<string> > categories = alpha.getCategories(); 
+
+   map<char, vector<string> >::iterator mapIt;
+   vector<string>::iterator vecIt;
+
+   for (mapIt = categories.begin(); mapIt != categories.end(); ++mapIt)
+   {
+      os << mapIt->first << endl; 
+      
+      for (vecIt = mapIt->second.begin(); vecIt != mapIt->second.end(); ++vecIt)
+         os << *vecIt << ' ';
+
+      os << endl; 
+   }
+
+   return os; 
+}
