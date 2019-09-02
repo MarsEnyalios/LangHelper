@@ -11,7 +11,7 @@
 #include <iostream>
 
 using std::string; using std::vector; using std::map;
-using std:ostream; using std::istream;
+using std::ostream; using std::istream;
 
 /**== CLASS ALPHA ============================================================
  * 
@@ -23,10 +23,10 @@ private:
    map<char, vector<string> > categories;
 public:
    Alpha(); 
-   Alpha(map<char, vector<string> > categories);
+      Alpha(map<char, vector<string> > cat);
 
    map<char, vector<string> > getCategories(); // return entire map
-   map<char, vector<string> >:: getCategory(char key); // returns one category
+   map<char, vector<string> >::iterator getCategory(char key); // returns one category
 
    bool addCategory(char name, vector<string> category); // use map insert
 
