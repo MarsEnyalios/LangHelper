@@ -14,18 +14,61 @@
  *****************************************************************************/
 #include <vector>
 #include <map>
+#include <string>
+#include <iostream>
 
 #include "alpha.h"
 
-using std::vector; using std::map;
+using std::vector; using std::map; using std::string; 
+using std::cout; using std::cin;
 
 int main()
 {
-   // test default values and display
-   Alpha alphabet; // create the object, this should use the auto initializer
+   // test copy constructor
 
-   alphabet.display(); // test display method body
+   char playAgain = ' '; 
+   char key = ' ';
+   string letter; 
+   vector<string> values;
 
-   vector<string> category;
-   
+   do
+   {
+      cout << "Enter a key for the new category: "; 
+
+      cin >> key;
+      cin.clear(); 
+      cin.ignore(100, '\n'); 
+
+      do {
+
+         cout << "Enter new sound: "; 
+
+         cin >> letter; 
+         cin.clear(); 
+         cin.ignore(100, '\n');
+
+         values.push_back(letter);
+
+      } while (letter != "x123");
+
+
+      playAgain = 'y';
+
+   } while(playAgain != 'y');
+
+   map<char, vector<string> > testM;
+
+   testM.insert(std::make_pair(key, values));
+
+   Alpha alpha(testM); 
+
+   alpha.display(); 
+
+   // test delete function
+   // TODO: do not let S be removed
+
+   alpha.deleteCategory(key);
+
+   alpha.display();
+
 }
