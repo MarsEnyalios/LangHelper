@@ -12,13 +12,20 @@
  *          language.
  *
  *****************************************************************************/
+#include <vector>
+#include <map>
 
 #include "alpha.h"
+
+using std::vector; using std::map;
 
 int main()
 {
    // test default values and display
    Alpha alphabet; // create the object, this should use the auto initializer
 
-   alphabet.display();
+   alphabet.display(); // test display method body
+
+   vector<string> category;
+   
 }

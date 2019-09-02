@@ -40,11 +40,11 @@ Alpha :: Alpha(map<char, vector<string> > categories)
 {
    this->categories = categories; 
    
-   categories['S'].push_back("cvc");
-   categories['S'].push_back("vcv");
-   categories['S'].push_back("cvcc");
-   categories['S'].push_back("vvc");
-   categories['S'].push_back("ccv");
+   this->categories['S'].push_back("cvc");
+   this->categories['S'].push_back("vcv");
+   this->categories['S'].push_back("cvcc");
+   this->categories['S'].push_back("vvc");
+   this->categories['S'].push_back("ccv");
 }
 
 map<char, vector<string> > Alpha :: getCategories()
