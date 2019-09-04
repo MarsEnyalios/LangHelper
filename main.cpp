@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Program: Language Helper v 0.3.1 - GNU 2.0 License (or later) @author
+ * Program: Root Generator v 0.3.2 - GNU 2.0 License (or later) @author
  * MarsEnyalios (M. Burkett)
  *
  * Purpose: This tool aids in constructing languages. The default values are
@@ -20,55 +20,90 @@
 #include "alpha.h"
 
 using std::vector; using std::map; using std::string; 
-using std::cout; using std::cin;
+using std::cout; using std::cin; using std::endl;
+
+// prototypes
+Alpha loadProject();
 
 int main()
 {
-   // test copy constructor
+   int menuChoice = 0;
+   char save = ' ';
 
-   char playAgain = ' '; 
-   char key = ' ';
-   string letter; 
-   vector<string> values;
+   cout << "Welcome to the Root Generator version 0.3.2!\n" << endl
+        << "\t1. Load Project\n"
+        << "\t2. Default Values\n" << endl; 
 
-   do
-   {
-      cout << "Enter a key for the new category: "; 
+   do {
+      cout << "Your choice: ";
 
-      cin >> key;
+      cin >> menuChoice;
       cin.clear(); 
       cin.ignore(100, '\n'); 
 
-      do {
+      if (menuChoice < 1 || menuChoice > 2 || !isdigit(userChoice))
+         cout << "Not an option! Try again.\n" << endl; 
+   } while (menuChoice < 1 || menuChoice > 2); 
 
-         cout << "Enter new sound: "; 
+   if (menuChoice == 1)
+      Alpha alpha(loadProject()); 
+   else if (menuChoice == 2)
+      Alpha alpha;
+        
+   do {
 
-         cin >> letter; 
+     cout << "MAIN MENU" << endl
+          << "\t1. Generate Roots\n"
+          << "\t2. View Alphabet & Syllables\n"
+          << "\t3. Change A Category\n"
+          << "\t4. Add Category\n"
+          << "\t5. Delete a Category\n"
+          << "\t6. Save Project\n"
+          << "\t7. Exit\n" << endl
+
+          << "Your choice: "; 
+
+     cin >> menuChoice; 
+     cin.clear(); 
+     cin.ignore(100, '\n'); 
+
+      if (menuChoice < 1 || menuChoice > 7 || !isdigit(menuChoice))
+         cout << "Not an option! Try again.\n" << endl; 
+      else if (menuChoice == 1)
+         generateRoots(alpha); 
+      else if (menuChoice == 2)
+         alpha.display(); 
+      else if (menuChoice == 3)
+         alpha.changeCategory();
+      else if (menuChoice == 4)
+         alpha.addCategory(); 
+      else if(menuChoice == 5)
+         alpha.deleteCategory();
+      else if (menuChoice == 6)
+         saveProject(alpha);
+      else if (menuChoice == 7)
+      {
+         cout << "Any unsaved progress will be lost. Would you like to save (y/n)? ";
+
+         cin >> save;
          cin.clear(); 
          cin.ignore(100, '\n');
 
-         values.push_back(letter);
+         if (save == 'y' || save == 'Y')
+         {
+            cout << "\nOkay! Saving!"; 
+            saveProject(alpha);
+         }
+         else
+            cout << "A'ight, bye now!"; 
+      }
 
-      } while (letter != "x123");
+   } while (menuChoice != 7);
 
+   return 0; 
+}
 
-      playAgain = 'y';
-
-   } while(playAgain != 'y');
-
-   map<char, vector<string> > testM;
-
-   testM.insert(std::make_pair(key, values));
-
-   Alpha alpha(testM); 
-
-   alpha.display(); 
-
-   // test delete function
-   // TODO: do not let S be removed
-
-   alpha.deleteCategory(key);
-
-   alpha.display();
-
+Alpha loadProject()
+{
+   
 }
