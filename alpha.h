@@ -32,9 +32,9 @@ public:
 
    /* instead of having a separate member function for syllables, just use this &
     * pass S. Use map [] operator.*/
-   void changeCategory(char key, vector<string> category);
+   void changeCategory();
 
-   void deleteCategory(char key); // use map erase
+   void deleteCategory(); // use map erase
 
    void display(); // always use this to display to user, never cout
 

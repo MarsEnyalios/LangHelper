@@ -64,13 +64,29 @@ void Alpha :: addCategory(char key, vector<string> category)
    categories.insert(std::pair<char, vector<string> >(key, category));
 }
 
-void Alpha :: changeCategory(char key, vector<string> category)
+void Alpha :: changeCategory()
 {
-   categories[key] = category;
+   
 }
 
-void Alpha :: deleteCategory(char key)
+void Alpha :: deleteCategory()
 {
+   char key;
+   char decision;
+
+   cout << "Please enter the name of the category you wish to delete (0 to backup): "; 
+   cin >> key; 
+   cin.clear(); 
+   cin.ignore(100, '\n');
+
+   cout << "\nYou want to delete " << key << " (y/n)? ";
+   cin >> decision;
+   cin.clear(); 
+   cin.ignore(100, '\n');
+
+   if (decision == 'n' || decision == 'N')
+      return; 
+
    categories.erase(key);
 }
 
