@@ -24,11 +24,14 @@ using std::cout; using std::cin; using std::endl;
 
 // prototypes
 Alpha loadProject();
+void saveProject(Alpha alpha);
+void generateRoots(Alpha alpha);
 
 int main()
 {
    int menuChoice = 0;
    char save = ' ';
+   Alpha alpha;
 
    cout << "Welcome to the Root Generator version 0.3.2!\n" << endl
         << "\t1. Load Project\n"
@@ -41,15 +44,18 @@ int main()
       cin.clear(); 
       cin.ignore(100, '\n'); 
 
-      if (menuChoice < 1 || menuChoice > 2 || !isdigit(userChoice))
+      if (menuChoice < 1 || menuChoice > 2 || !isdigit(menuChoice))
          cout << "Not an option! Try again.\n" << endl; 
    } while (menuChoice < 1 || menuChoice > 2); 
 
+
+
    if (menuChoice == 1)
-      Alpha alpha(loadProject()); 
-   else if (menuChoice == 2)
-      Alpha alpha;
-        
+   {
+      Alpha temp(loadProject());
+      alpha = temp; 
+   }
+
    do {
 
      cout << "MAIN MENU" << endl
@@ -76,7 +82,7 @@ int main()
       else if (menuChoice == 3)
          alpha.changeCategory();
       else if (menuChoice == 4)
-         alpha.addCategory(); 
+         alpha.addCategory();
       else if(menuChoice == 5)
          alpha.deleteCategory();
       else if (menuChoice == 6)
@@ -97,7 +103,6 @@ int main()
          else
             cout << "A'ight, bye now!"; 
       }
-
    } while (menuChoice != 7);
 
    return 0; 
@@ -106,4 +111,9 @@ int main()
 Alpha loadProject()
 {
    
+}
+
+void saveProject(Alpha alpha)
+{
+
 }

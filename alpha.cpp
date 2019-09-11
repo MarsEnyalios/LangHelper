@@ -59,14 +59,43 @@ map<char, vector<string> >::iterator Alpha :: getCategory(char key)
    return it;
 }
 
-void Alpha :: addCategory(char key, vector<string> category)
+void Alpha :: addCategory()
 {
-   categories.insert(std::pair<char, vector<string> >(key, category));
+   char key = 'X';
+   vector<string> letters;
+
+   // TODO: prompt for key
+   // TODO: check if key already exists
+   // TODO: prompt for vector
+   categories.insert(std::pair<char, vector<string> >(key, letters));
 }
 
 void Alpha :: changeCategory()
 {
-   
+   char key; 
+   string letter; 
+
+   display(); 
+
+   cout << "Which category would you like to change? (0 to backup): "; 
+   cin >> key;
+   cin.clear();
+   cin.ignore(100, '\n'); 
+
+   // TODO: verify that key exists
+
+   do {
+      cout << "\nType a combination to remove or add (0 to backup): "; 
+      cin >> letter;
+      cin.clear(); 
+      cin.ignore(100, '\n'); 
+
+      // TODO: if key-letter does not exist, add it
+      // TODO: if key-letter does exist, remove it
+
+   } while (letter != "0");
+
+   // TODO: prompt to play again
 }
 
 void Alpha :: deleteCategory()
@@ -78,6 +107,9 @@ void Alpha :: deleteCategory()
    cin >> key; 
    cin.clear(); 
    cin.ignore(100, '\n');
+
+   // TODO: verify that key exists
+   // TODO: verify that key is not S. Syllables is not a removeable category!
 
    cout << "\nYou want to delete " << key << " (y/n)? ";
    cin >> decision;
