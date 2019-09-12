@@ -62,18 +62,50 @@ map<char, vector<string> >::iterator Alpha :: getCategory(char key)
 void Alpha :: addCategory()
 {
    char key = 'X';
+   string temp = "yikes"; 
    vector<string> letters;
 
-   // TODO: prompt for key
-   // TODO: check if key already exists
-   // TODO: prompt for vector
+   cout << "Enter key for new category (0 to backup): "; 
+   cin >> key; 
+   cin.clear(); 
+   cin.ignore(100, '\n'); 
+
+   if (key == "0")
+      return;
+   else if (key == "S")
+   {
+      cout << "\nS is for syllable structures and cannot be added because it cannot be removed! "
+           << "Please choose something different." << endl;
+   }
+   else if (map.count(key))
+      cout << "\nThat category already exists! Please choose something else." << endl;
+   else
+   {
+      do {
+         cout << "\nStart entering your letters! (0 to end)" << endl; 
+         cin >> temp; 
+
+         if (temp != "0")
+            letters.push_back();
+
+      } while (temp != "0");
+   }
+
    categories.insert(std::pair<char, vector<string> >(key, letters));
+
+   if (map.count(key))
+      cout << "\nCategory added!" << endl; 
+   else
+   {
+      cout << "\nWhoops, looks like something went wrong in addCategory()! "
+           << "Somebody should look into that." << endl;
+   }
 }
 
 void Alpha :: changeCategory()
 {
    char key; 
-   string letter; 
+   string letter;
 
    display(); 
 
@@ -88,14 +120,32 @@ void Alpha :: changeCategory()
       cout << "\nType a combination to remove or add (0 to backup): "; 
       cin >> letter;
       cin.clear(); 
-      cin.ignore(100, '\n'); 
+      cin.ignore(100, '\n');
 
-      // TODO: if key-letter does not exist, add it
-      // TODO: if key-letter does exist, remove it
+      if (letter %in% categories[key])
+      {
+         /*vector<string>::iterator it = categories[key].begin(); 
+
+         while (it != categories[key].end())
+         {
+            if (*it == letter)
+               it = categories[key].erase(it);
+            else
+               ++it;
+         } // below is the normal approach and should work, 
+           // but I understand the iterator approach better, so just in case, i'll leave that...*/ 
+
+         categories[key].erase(remove(categories[key].begin(), categories[key].end(), letter), categories[key].end()); 
+      }
+      else if (letter == "0")
+      {
+         cout << "\nReturning to main menu..." << endl;
+         return;
+      }
+      else
+         categories[key].push_back(letter);
 
    } while (letter != "0");
-
-   // TODO: prompt to play again
 }
 
 void Alpha :: deleteCategory()

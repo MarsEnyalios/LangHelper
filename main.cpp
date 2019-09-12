@@ -105,7 +105,7 @@ int main()
       }
    } while (menuChoice != 7);
 
-   return 0; 
+   reurn 0; 
 }
 
 Alpha loadProject()
