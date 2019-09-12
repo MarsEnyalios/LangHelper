@@ -105,7 +105,12 @@ int main()
       }
    } while (menuChoice != 7);
 
-   reurn 0; 
+   return 0; 
+}
+
+void generateRoots(Alpha alpha)
+{
+
 }
 
 Alpha loadProject()
@@ -116,4 +121,6 @@ Alpha loadProject()
 void saveProject(Alpha alpha)
 {
 
+
+   // TODO: boolean verification of save working
 }

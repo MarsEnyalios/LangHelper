@@ -6,6 +6,7 @@
 #include <vector>
 #include <iostream>
 #include <map>
+#include <algorithm>
 
 #include "alpha.h"
 
@@ -62,7 +63,7 @@ map<char, vector<string> >::iterator Alpha :: getCategory(char key)
 void Alpha :: addCategory()
 {
    char key = 'X';
-   string temp = "yikes"; 
+   string temp = "yikes";
    vector<string> letters;
 
    cout << "Enter key for new category (0 to backup): "; 
@@ -70,14 +71,14 @@ void Alpha :: addCategory()
    cin.clear(); 
    cin.ignore(100, '\n'); 
 
-   if (key == "0")
+   if (key == '0')
       return;
-   else if (key == "S")
+   else if (key == 'S')
    {
       cout << "\nS is for syllable structures and cannot be added because it cannot be removed! "
            << "Please choose something different." << endl;
    }
-   else if (map.count(key))
+   else if (categories.count(key))
       cout << "\nThat category already exists! Please choose something else." << endl;
    else
    {
@@ -86,14 +87,14 @@ void Alpha :: addCategory()
          cin >> temp; 
 
          if (temp != "0")
-            letters.push_back();
+            letters.push_back(temp);
 
       } while (temp != "0");
    }
 
    categories.insert(std::pair<char, vector<string> >(key, letters));
 
-   if (map.count(key))
+   if (categories.count(key))
       cout << "\nCategory added!" << endl; 
    else
    {
@@ -104,15 +105,15 @@ void Alpha :: addCategory()
 
 void Alpha :: changeCategory()
 {
-   char key; 
+   char key;
    string letter;
 
-   display(); 
+   display();
 
    cout << "Which category would you like to change? (0 to backup): "; 
    cin >> key;
    cin.clear();
-   cin.ignore(100, '\n'); 
+   cin.ignore(100, '\n');
 
    // TODO: verify that key exists
 
@@ -122,9 +123,9 @@ void Alpha :: changeCategory()
       cin.clear(); 
       cin.ignore(100, '\n');
 
-      if (letter %in% categories[key])
-      {
-         /*vector<string>::iterator it = categories[key].begin(); 
+      if (find(categories[key].begin(), categories[key].end(), letter) != categories[key].end())
+      {/*
+         vector<string>::iterator it = categories[key].begin(); 
 
          while (it != categories[key].end())
          {
@@ -133,7 +134,7 @@ void Alpha :: changeCategory()
             else
                ++it;
          } // below is the normal approach and should work, 
-           // but I understand the iterator approach better, so just in case, i'll leave that...*/ 
+           // but I understand the iterator approach better, so just in case... */
 
          categories[key].erase(remove(categories[key].begin(), categories[key].end(), letter), categories[key].end()); 
       }
