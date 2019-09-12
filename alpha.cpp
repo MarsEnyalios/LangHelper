@@ -72,7 +72,10 @@ void Alpha :: addCategory()
    cin.ignore(100, '\n'); 
 
    if (key == '0')
+   {
+      cout << "\nReturning to main menu..." << endl; 
       return;
+   }
    else if (key == 'S')
    {
       cout << "\nS is for syllable structures and cannot be added because it cannot be removed! "
@@ -95,7 +98,10 @@ void Alpha :: addCategory()
    categories.insert(std::pair<char, vector<string> >(key, letters));
 
    if (categories.count(key))
-      cout << "\nCategory added!" << endl; 
+   {
+      cout << "\nCategory added! New alphabet:" << endl; 
+      display(); 
+   }
    else
    {
       cout << "\nWhoops, looks like something went wrong in addCategory()! "
@@ -110,15 +116,19 @@ void Alpha :: changeCategory()
 
    display();
 
-   cout << "Which category would you like to change? (0 to backup): "; 
+   cout << "\nCategory to change (0 to backup): "; 
    cin >> key;
    cin.clear();
    cin.ignore(100, '\n');
 
-   // TODO: verify that key exists
+   if (key == '0')
+   {
+      cout << "\nReturning to main menu...\n" << endl;
+      return;
+   }
 
    do {
-      cout << "\nType a combination to remove or add (0 to backup): "; 
+      cout << "\nCombination to remove or add (0 to end): "; 
       cin >> letter;
       cin.clear(); 
       cin.ignore(100, '\n');
@@ -133,18 +143,16 @@ void Alpha :: changeCategory()
                it = categories[key].erase(it);
             else
                ++it;
-         } // below is the normal approach and should work, 
+         } // below is the normal approach with <algorithm> and should work, 
            // but I understand the iterator approach better, so just in case... */
 
          categories[key].erase(remove(categories[key].begin(), categories[key].end(), letter), categories[key].end()); 
       }
-      else if (letter == "0")
-      {
-         cout << "\nReturning to main menu..." << endl;
-         return;
-      }
-      else
+      else if (letter != "0")
          categories[key].push_back(letter);
+
+      cout << "\nChanged alphabet: " << endl;
+      display(); 
 
    } while (letter != "0");
 }
@@ -158,6 +166,9 @@ void Alpha :: deleteCategory()
    cin >> key; 
    cin.clear(); 
    cin.ignore(100, '\n');
+
+   if (key == '0')
+      return;
 
    // TODO: verify that key exists
    // TODO: verify that key is not S. Syllables is not a removeable category!
@@ -177,6 +188,8 @@ void Alpha :: display()
 {
    map<char, vector<string> >::iterator mapIt;
    vector<string>::iterator vecIt;
+
+   cout << endl; 
 
    for (mapIt = categories.begin(); mapIt != categories.end(); ++mapIt)
    {

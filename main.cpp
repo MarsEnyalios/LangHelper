@@ -35,30 +35,28 @@ int main()
 
    cout << "Welcome to the Root Generator version 0.3.2!\n" << endl
         << "\t1. Load Project\n"
-        << "\t2. Default Values\n" << endl; 
+        << "\t2. Default Values\n" << endl;
 
    do {
       cout << "Your choice: ";
 
       cin >> menuChoice;
-      cin.clear(); 
-      cin.ignore(100, '\n'); 
+      cin.clear();
+      cin.ignore(100, '\n');
 
-      if (menuChoice < 1 || menuChoice > 2 || !isdigit(menuChoice))
-         cout << "Not an option! Try again.\n" << endl; 
-   } while (menuChoice < 1 || menuChoice > 2); 
-
-
+      if (menuChoice < 1 || menuChoice > 2)
+         cout << "\nNot an option! Try again.\n" << endl;
+   } while (menuChoice < 1 || menuChoice > 2);
 
    if (menuChoice == 1)
    {
-      Alpha temp(loadProject());
+      Alpha temp(loadProject()); // i want to use my copy constructor gdi
       alpha = temp; 
    }
 
    do {
 
-     cout << "MAIN MENU" << endl
+     cout << "\nMAIN MENU\n" << endl
           << "\t1. Generate Roots\n"
           << "\t2. View Alphabet & Syllables\n"
           << "\t3. Change A Category\n"
@@ -73,7 +71,7 @@ int main()
      cin.clear(); 
      cin.ignore(100, '\n'); 
 
-      if (menuChoice < 1 || menuChoice > 7 || !isdigit(menuChoice))
+      if (menuChoice < 1 || menuChoice > 7)
          cout << "Not an option! Try again.\n" << endl; 
       else if (menuChoice == 1)
          generateRoots(alpha); 
