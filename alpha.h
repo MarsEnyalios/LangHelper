@@ -35,7 +35,15 @@ public:
 
    void display(); // always use this to display to user, never cout
 
+   // OPERATORS
+
    friend ostream& operator<<(ostream& os, Alpha& alpha); // only use to write!
+   
+   string& operator()(int key, int index); // returns a string from vector
+   string& operator()(char key, int index);
+
+   vector<string>& operator()(char key);
+   vector<string>& operator()(int key); 
 };
 
 #endif // ALPHA_H

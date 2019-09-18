@@ -17,6 +17,8 @@
 #include <string>
 #include <iostream>
 
+#include <cstdlib>
+
 #include "alpha.h"
 
 using std::vector; using std::map; using std::string; 
@@ -26,12 +28,14 @@ using std::cout; using std::cin; using std::endl;
 Alpha loadProject();
 void saveProject(Alpha alpha);
 void generateRoots(Alpha alpha);
+void saveRoots(); 
 
 int main()
 {
    int menuChoice = 0;
    char save = ' ';
    Alpha alpha;
+   vector<string> roots;
 
    cout << "Welcome to the Root Generator version 0.3.2!\n" << endl
         << "\t1. Load Project\n"
@@ -103,22 +107,67 @@ int main()
       }
    } while (menuChoice != 7);
 
-   return 0; 
+   return 0;
 }
 
+/* GENERATE ROOTS ************************************************************
+ * Purpose:
+ */
 void generateRoots(Alpha alpha)
+{
+
+   map<char, vector<string> > roots; // save roots to this
+   int index = 0; 
+   string key = "";
+   string letter = "";
+   string root = "";
+   int size = 0;
+
+   cout << "Generating roots...\n" << endl; 
+   
+   // TODO: override [] operator in alpha
+
+/*   // iterate through SYLLABLES vector
+   for (int i = 0; alpha['s'].size(); ++i)
+   {
+      // iterate through individual letters in syllable values
+      for (int j = 0; alpha['s'][i].size(); ++j)
+      {
+         key = alpha['s'][i][j]; // category
+         size = alpha[key].size(); // rand limit
+         index = rand() % size; // the random selection from the category
+         letter = alpha[key][index];
+         root += letter;
+
+         cout << letter;
+      }
+      cout << " " << endl;
+      roots.insert(make_pair(i, root));
+   }*/
+
+   // prompt S to save, G to generate again, 0 to return
+}
+
+/* SAVE ROOTS ****************************************************************
+ * Purpose: save roots to a file
+ */
+void saveRoots()
 {
 
 }
 
+/* LOAD PROJECT **************************************************************
+ * Purpose: load a project from text files
+ */
 Alpha loadProject()
 {
    
 }
 
+/* SAVE PROJECT **************************************************************
+ * Purpose: save Alphabet and roots to separate files
+ */
 void saveProject(Alpha alpha)
 {
-
-
    // TODO: boolean verification of save working
 }

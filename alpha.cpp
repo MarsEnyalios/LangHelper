@@ -17,42 +17,46 @@ using std::cout; using std::cin; using std::endl;
 
 Alpha :: Alpha()
 {
-   categories['S'].push_back("cvc");
-   categories['S'].push_back("vcv");
-   categories['S'].push_back("cvcc");
-   categories['S'].push_back("vvc");
-   categories['S'].push_back("ccv");
+   categories['s'].push_back("cvc");
+   categories['s'].push_back("vcv");
+   categories['s'].push_back("cvcc");
+   categories['s'].push_back("vvc");
+   categories['s'].push_back("ccv");
 
-   categories['C'].push_back("k");
-   categories['C'].push_back("m");
-   categories['C'].push_back("n");
-   categories['C'].push_back("p");
-   categories['C'].push_back("q");
-   categories['C'].push_back("t");
+   categories['c'].push_back("k");
+   categories['c'].push_back("m");
+   categories['c'].push_back("n");
+   categories['c'].push_back("p");
+   categories['c'].push_back("q");
+   categories['c'].push_back("t");
 
-   categories['V'].push_back("a");
-   categories['V'].push_back("e");
-   categories['V'].push_back("i");
-   categories['V'].push_back("o");
-   categories['V'].push_back("u");
+   categories['v'].push_back("a");
+   categories['v'].push_back("e");
+   categories['v'].push_back("i");
+   categories['v'].push_back("o");
+   categories['v'].push_back("u");
 }
 
 Alpha :: Alpha(map<char, vector<string> > categories)
 {
    this->categories = categories; 
    
-   this->categories['S'].push_back("cvc");
-   this->categories['S'].push_back("vcv");
-   this->categories['S'].push_back("cvcc");
-   this->categories['S'].push_back("vvc");
-   this->categories['S'].push_back("ccv");
+   this->categories['s'].push_back("cvc");
+   this->categories['s'].push_back("vcv");
+   this->categories['s'].push_back("cvcc");
+   this->categories['s'].push_back("vvc");
+   this->categories['s'].push_back("ccv");
 }
 
+/* GETTERS */
+
+// Return all categories
 map<char, vector<string> > Alpha :: getCategories()
 {
    return categories; 
 }
 
+// Return a single category iterator?
 map<char, vector<string> >::iterator Alpha :: getCategory(char key)
 {
    map<char, vector<string> >::iterator it = categories.find(key); 
@@ -60,6 +64,9 @@ map<char, vector<string> >::iterator Alpha :: getCategory(char key)
    return it;
 }
 
+/* ADD CATEGORY **************************************************************
+ * Purpose: add a new category
+ */
 void Alpha :: addCategory()
 {
    char key = 'X';
@@ -109,6 +116,10 @@ void Alpha :: addCategory()
    }
 }
 
+/* CHANGE CATEGORY ***********************************************************
+ * Purpose: alter a pre-existing category. User selects a category, then
+ *          enters letters to add or remove.
+ */
 void Alpha :: changeCategory()
 {
    char key;
@@ -126,6 +137,11 @@ void Alpha :: changeCategory()
       cout << "\nReturning to main menu...\n" << endl;
       return;
    }
+   else if (!categories.count(key))
+   {
+      cout << "\nYou can't change a category that doesn't exist! Returning to main menu..." << endl;
+      return;
+   }
 
    do {
       cout << "\nCombination to remove or add (0 to end): "; 
@@ -134,18 +150,7 @@ void Alpha :: changeCategory()
       cin.ignore(100, '\n');
 
       if (find(categories[key].begin(), categories[key].end(), letter) != categories[key].end())
-      {/*
-         vector<string>::iterator it = categories[key].begin(); 
-
-         while (it != categories[key].end())
-         {
-            if (*it == letter)
-               it = categories[key].erase(it);
-            else
-               ++it;
-         } // below is the normal approach with <algorithm> and should work, 
-           // but I understand the iterator approach better, so just in case... */
-
+      {
          categories[key].erase(remove(categories[key].begin(), categories[key].end(), letter), categories[key].end()); 
       }
       else if (letter != "0")
@@ -157,6 +162,9 @@ void Alpha :: changeCategory()
    } while (letter != "0");
 }
 
+/* DELETE CATEGORY ***********************************************************
+ * Purpose: Deletes an entire category
+ */
 void Alpha :: deleteCategory()
 {
    char key;
@@ -168,22 +176,39 @@ void Alpha :: deleteCategory()
    cin.ignore(100, '\n');
 
    if (key == '0')
-      return;
-
-   // TODO: verify that key exists
-   // TODO: verify that key is not S. Syllables is not a removeable category!
-
-   cout << "\nYou want to delete " << key << " (y/n)? ";
-   cin >> decision;
-   cin.clear(); 
-   cin.ignore(100, '\n');
-
-   if (decision == 'n' || decision == 'N')
+   {
+      cout << "\nNothing deleted. Returning to main menu..." << endl;
       return; 
+   }
+   else if (key == 'S' || key == 's')
+   {
+      cout << "\nCannot delete the syllables category. Returning to main menu..." << endl;
+      return; 
+   }
+   else if (!categories.count(key))
+   {
+      cout << "\nThat category does not exist! Returning to main menu..." << endl; 
+   }
+   else 
+   {
+      cout << "\nYou want to delete " << key << " (y/n)? ";
+      cin >> decision;
+      cin.clear(); 
+      cin.ignore(100, '\n');
 
+      if (decision == 'n' || decision == 'N')
+      {
+         cout << "\nNothing deleted. Returning to main menu..." << endl; 
+         return;
+      }
+   }
    categories.erase(key);
 }
 
+
+/* DISPLAY *******************************************************************
+ * Purpose: display the current alphabet and syllable structures
+ */
 void Alpha :: display()
 {
    map<char, vector<string> >::iterator mapIt;
@@ -201,6 +226,12 @@ void Alpha :: display()
       cout << endl; 
    }
 }
+
+// OPERATORS
+
+/* WRITING OPERATOR **********************************************************
+ * Purpose: a writing ofstream operator
+ */
 
 ostream& operator<<(ostream& os, Alpha& alpha)
 {
@@ -220,4 +251,35 @@ ostream& operator<<(ostream& os, Alpha& alpha)
    }
 
    return os; 
+}
+
+string& Alpha::operator()(int key, int index)
+{
+   //if (key > categories.size() || key < 1 || index > categories[key].size() || index < 0)
+
+   return categories[key][index];
+}
+
+string& Alpha::operator()(char key, int index)
+{
+  // if (!categories.count(key) || index > categories[key].size() || index < 0)
+     
+
+   return categories[key][index];
+}
+
+vector<string>& Alpha::operator()(char key)
+{
+  // if (!categories.count(key))
+      
+
+   return categories[key];
+}
+
+vector<string>& Alpha::operator()(int key)
+{
+  // if (key > categories.size() || key < 0)
+      
+
+   return categories[key];
 }
