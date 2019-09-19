@@ -116,34 +116,46 @@ int main()
 void generateRoots(Alpha alpha)
 {
 
-   map<char, vector<string> > roots; // save roots to this
+   map<int, string> roots; // save roots to this
    int index = 0; 
-   string key = "";
+   char key = ' ';
    string letter = "";
-   string root = "";
+   string root = ""; // individual roots
    int size = 0;
+   vector<string> sylls = alpha.getCategory('s');
+   string temp2 = ""; 
+   int plays = 0;
 
-   cout << "Generating roots...\n" << endl; 
+   cout << "\nHow many times to run? Up to 50: "; 
+   cin >> plays;
+   cin.clear(); 
+   cin.ignore(100, '\n');
    
-   // TODO: override [] operator in alpha
+   cout << "\nGenerating roots...\n" << endl;
 
-/*   // iterate through SYLLABLES vector
-   for (int i = 0; alpha['s'].size(); ++i)
+   for (int k = 0; k < plays; ++k)
+   {
+   // clear out roots before running below again with root = ""
+   for (int i = 0; i < sylls.size(); ++i)
    {
       // iterate through individual letters in syllable values
-      for (int j = 0; alpha['s'][i].size(); ++j)
+      temp2 = sylls[i];
+      for (int j = 0; j < temp2.size(); ++j)
       {
-         key = alpha['s'][i][j]; // category
-         size = alpha[key].size(); // rand limit
+         key = temp2[j]; // assign category
+         size = alpha.getCategory(key).size(); // rand limit
          index = rand() % size; // the random selection from the category
-         letter = alpha[key][index];
+         letter = alpha(key, index); 
          root += letter;
 
          cout << letter;
       }
-      cout << " " << endl;
+      cout << " ";
       roots.insert(make_pair(i, root));
-   }*/
+   }
+
+   cout << endl;
+   }
 
    // prompt S to save, G to generate again, 0 to return
 }

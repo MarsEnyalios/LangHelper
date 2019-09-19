@@ -57,11 +57,9 @@ map<char, vector<string> > Alpha :: getCategories()
 }
 
 // Return a single category iterator?
-map<char, vector<string> >::iterator Alpha :: getCategory(char key)
+vector<string> Alpha :: getCategory(char key)
 {
-   map<char, vector<string> >::iterator it = categories.find(key); 
-
-   return it;
+   return categories[key];
 }
 
 /* ADD CATEGORY **************************************************************
@@ -263,7 +261,6 @@ string& Alpha::operator()(int key, int index)
 string& Alpha::operator()(char key, int index)
 {
   // if (!categories.count(key) || index > categories[key].size() || index < 0)
-     
 
    return categories[key][index];
 }
@@ -272,14 +269,12 @@ vector<string>& Alpha::operator()(char key)
 {
   // if (!categories.count(key))
       
-
    return categories[key];
 }
 
 vector<string>& Alpha::operator()(int key)
 {
   // if (key > categories.size() || key < 0)
-      
 
    return categories[key];
 }

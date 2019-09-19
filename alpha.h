@@ -26,7 +26,7 @@ public:
    Alpha(map<char, vector<string> > categories);
 
    map<char, vector<string> > getCategories(); // return entire map
-   map<char, vector<string> >::iterator getCategory(char key); // returns one category
+   vector<string> getCategory(char key); // returns one category
 
    void changeCategory(); // use vector insert and erase functions
    void addCategory(); // use map insert
