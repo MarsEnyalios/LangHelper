@@ -247,7 +247,6 @@ ostream& operator<<(ostream& os, Alpha& alpha)
 
       os << endl; 
    }
-
    return os; 
 }
 

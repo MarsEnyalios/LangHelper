@@ -15,19 +15,23 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <iomanip>
 #include <iostream>
-
+#include <fstream>
 #include <cstdlib>
+#include <ctime>
+#include <set>
 
 #include "alpha.h"
 
-using std::vector; using std::map; using std::string; 
+using std::vector; using std::map; using std::set; using std::string; 
 using std::cout; using std::cin; using std::endl;
+using std::ofstream; using std::ifstream; 
 
 // prototypes
 Alpha loadProject();
 void saveProject(Alpha alpha);
-void generateRoots(Alpha alpha);
+void generateRoots(Alpha alpha, string counter);
 void saveRoots(); 
 
 int main()
@@ -35,7 +39,30 @@ int main()
    int menuChoice = 0;
    char save = ' ';
    Alpha alpha;
-   vector<string> roots;
+   int count = 0; // increments based on how many times/sessions 
+                  // this program has been run in this folder
+   string counter = ""; // for filenames
+   // TODO: make a secondary counter that increases each time the alphabet changes 
+   // (not sylls tho), like "root_session_0-0, root_session_0-1"
+
+   ifstream fin;
+   ofstream fout;
+   
+   fin.open("counter.txt");
+   
+   if (fin.fail())
+   {
+      fout.open("counter.txt"); 
+      fout << count; 
+      fout.close(); 
+   }
+   else
+   {
+      fin >> count; 
+      fin.close();
+   }
+
+   counter = std::to_string(count);
 
    cout << "Welcome to the Root Generator version 0.3.2!\n" << endl
         << "\t1. Load Project\n"
@@ -78,7 +105,7 @@ int main()
       if (menuChoice < 1 || menuChoice > 7)
          cout << "Not an option! Try again.\n" << endl; 
       else if (menuChoice == 1)
-         generateRoots(alpha); 
+         generateRoots(alpha, counter); 
       else if (menuChoice == 2)
          alpha.display(); 
       else if (menuChoice == 3)
@@ -107,16 +134,23 @@ int main()
       }
    } while (menuChoice != 7);
 
+   ++count;
+
+   fout.open("counter.txt", std::ios::out); 
+   fout << count; 
+   fout.close(); 
+
    return 0;
 }
 
 /* GENERATE ROOTS ************************************************************
  * Purpose:
  */
-void generateRoots(Alpha alpha)
+void generateRoots(Alpha alpha, string counter)
 {
 
-   map<int, string> roots; // save roots to this
+   set<string> roots; // save roots to this
+   set<string> fileRoots; // use this to eliminate duplicates in a session
    int index = 0; 
    char key = ' ';
    string letter = "";
@@ -125,6 +159,10 @@ void generateRoots(Alpha alpha)
    vector<string> sylls = alpha.getCategory('s');
    string temp2 = ""; 
    int plays = 0;
+   string filename = "root_session_"; 
+
+   ifstream fin; 
+   ofstream fout;
 
    cout << "\nHow many times to run? Up to 50: "; 
    cin >> plays;
@@ -135,29 +173,50 @@ void generateRoots(Alpha alpha)
 
    for (int k = 0; k < plays; ++k)
    {
-   // clear out roots before running below again with root = ""
-   for (int i = 0; i < sylls.size(); ++i)
-   {
-      // iterate through individual letters in syllable values
-      temp2 = sylls[i];
-      for (int j = 0; j < temp2.size(); ++j)
+      for (int i = 0; i < sylls.size(); ++i)
       {
-         key = temp2[j]; // assign category
-         size = alpha.getCategory(key).size(); // rand limit
-         index = rand() % size; // the random selection from the category
-         letter = alpha(key, index); 
-         root += letter;
+         root = "";
+         // iterate through individual letters in syllable values
+         temp2 = sylls[i];
+         for (int j = 0; j < temp2.size(); ++j)
+         {
+            key = temp2[j]; // assign category
+            size = alpha.getCategory(key).size(); // rand limit
+            index = rand() % size; // the random selection from the category
+            letter = alpha(key, index); 
+            root += letter;
 
-         cout << letter;
+            cout << letter;
+         }
+         cout << " ";
+         roots.insert(root);
       }
-      cout << " ";
-      roots.insert(make_pair(i, root));
+      cout << endl;
    }
 
-   cout << endl;
+   filename += counter; 
+   filename += ".txt";
+   
+   fin.open(filename.c_str());
+
+   if (fin.is_open())
+   {
+      while (fin >> root)
+      {
+         cout << root << " "; 
+         fileRoots.insert(root); 
+      }
+      fin.close();
    }
 
-   // prompt S to save, G to generate again, 0 to return
+   fileRoots.insert(roots.begin(), roots.end());
+
+   fout.open(filename.c_str());
+
+   for(set<string>::const_iterator i = fileRoots.begin(); i != fileRoots.end(); ++i)
+      fout << *i << '\n';
+
+   fout.close();
 }
 
 /* SAVE ROOTS ****************************************************************
