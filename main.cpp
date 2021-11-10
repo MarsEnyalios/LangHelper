@@ -64,37 +64,18 @@ int main()
    }
 
    // Run the main options
-   cout << "Welcome to the Root Generator version 0.3.3!\n" << endl
-        << "\t1. Load alphabet\n"
-        << "\t2. Default Values\n" << endl;
+   cout << "Welcome to Root Generator version 0.4.0!\n" << endl;
 
    do {
-      cout << "Your choice: ";
-
-      cin >> menuChoice;
-      cin.clear();
-      cin.ignore(100, '\n');
-
-      if (menuChoice < 1 || menuChoice > 2)
-         cout << "\nNot an option! Try again.\n" << endl;
-   } while (menuChoice < 1 || menuChoice > 2);
-
-   if (menuChoice == 1)
-   {
-      Alpha temp(loadProject()); // i want to use my copy constructor gdi
-      alpha = temp; 
-   }
-
-   do {
-
      cout << "\nMAIN MENU\n" << endl
           << "\t1. Generate Roots\n"
           << "\t2. View Alphabet & Syllables\n"
           << "\t3. Change A Category\n"
           << "\t4. Add Category\n"
           << "\t5. Delete a Category\n"
-          << "\t6. Save Project\n"
-          << "\t7. Exit\n" << endl
+          << "\t6. Save Alphabet\n"
+          << "\t7. Load Alphabet\n"
+          << "\t8. Exit\n" << endl
 
           << "Your choice: "; 
 
@@ -102,7 +83,7 @@ int main()
      cin.clear(); 
      cin.ignore(100, '\n'); 
 
-      if (menuChoice < 1 || menuChoice > 7)
+      if (menuChoice < 1 || menuChoice > 8)
          cout << "Not an option! Try again.\n" << endl; 
       else if (menuChoice == 1)
          generateRoots(alpha, sessionCounter, alphabetCounter);
@@ -124,6 +105,22 @@ int main()
          saveProject(alpha);
       else if (menuChoice == 7)
       {
+         cout << "This will overwrite your current alphabet. Proceed (y/n)? ";
+         cin >> save;
+         cin.clear(); 
+         cin.ignore(100, '\n');
+
+         if (save == 'y' || save == 'Y')
+         {
+
+            alpha = loadProject(); 
+            alphabetCounter++; 
+         }
+         else
+            cout << "Nothing was loaded. Returning to main menu.\n" << endl;
+      }
+      else if (menuChoice == 8)
+      {
          cout << "Any unsaved alphabet will be lost. Would you like to save (y/n)? ";
 
          cin >> save;
@@ -138,7 +135,7 @@ int main()
          else
             cout << "A'ight, bye now!"; 
       }
-   } while (menuChoice != 7);
+   } while (menuChoice != 8);
 
    ++sessionCounter;
 
@@ -206,15 +203,14 @@ void generateRoots(Alpha alpha, int sessionCounter, int alphabetCounter)
    filename += std::to_string(alphabetCounter);
    filename += ".txt";
    
+   // gather the previously saved roots, add new roots, save to session file
    fin.open(filename.c_str());
 
    if (fin.is_open())
    {
       while (fin >> root)
-      {
-         cout << root << " "; 
          fileRoots.insert(root); 
-      }
+
       fin.close();
    }
 
@@ -253,10 +249,7 @@ Alpha loadProject()
          while (isalnum(fin.peek()))
          { 
             fin >> key;
-            cout << key << endl; 
-               
             getline(fin, longTemp); 
-            cout << longTemp << endl << endl;
 
             stringstream ss(longTemp);
 
