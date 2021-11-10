@@ -18,54 +18,54 @@
 #include <iomanip>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <cstdlib>
 #include <ctime>
 #include <set>
+#include <cctype>
 
 #include "alpha.h"
 
 using std::vector; using std::map; using std::set; using std::string; 
 using std::cout; using std::cin; using std::endl;
 using std::ofstream; using std::ifstream; 
+using std::stringstream;
 
 // prototypes
 Alpha loadProject();
 void saveProject(Alpha alpha);
-void generateRoots(Alpha alpha, string counter);
-void saveRoots(); 
+void generateRoots(Alpha alpha, int sessionCounter, int alphabetCounter);
+string getFilename();
 
 int main()
 {
    int menuChoice = 0;
    char save = ' ';
-   Alpha alpha;
-   int count = 0; // increments based on how many times/sessions 
-                  // this program has been run in this folder
-   string counter = ""; // for filenames
-   // TODO: make a secondary counter that increases each time the alphabet changes 
-   // (not sylls tho), like "root_session_0-0, root_session_0-1"
+   Alpha alpha;   // object to hold alphabet and syllable structures
+   int sessionCounter = 0;  // increments per session (stores in counter.txt)
+   int alphabetCounter = 0; // (optionally) increments each alphabet change
+                            // Does NOT need storing as the value would always be 0
 
    ifstream fin;
    ofstream fout;
    
    fin.open("counter.txt");
    
-   if (fin.fail())
-   {
+   if (fin.fail()) // if counter.txt does not exist, create a new one & fill
+   {               // with the default value 0
       fout.open("counter.txt"); 
-      fout << count; 
-      fout.close(); 
+      fout << sessionCounter;
+      fout.close();
    }
-   else
+   else            // otherwise, import the last saved session counter
    {
-      fin >> count; 
+      fin >> sessionCounter;
       fin.close();
    }
 
-   counter = std::to_string(count);
-
-   cout << "Welcome to the Root Generator version 0.3.2!\n" << endl
-        << "\t1. Load Project\n"
+   // Run the main options
+   cout << "Welcome to the Root Generator version 0.3.3!\n" << endl
+        << "\t1. Load alphabet\n"
         << "\t2. Default Values\n" << endl;
 
    do {
@@ -105,20 +105,26 @@ int main()
       if (menuChoice < 1 || menuChoice > 7)
          cout << "Not an option! Try again.\n" << endl; 
       else if (menuChoice == 1)
-         generateRoots(alpha, counter); 
+         generateRoots(alpha, sessionCounter, alphabetCounter);
       else if (menuChoice == 2)
-         alpha.display(); 
+         alpha.display();
       else if (menuChoice == 3)
-         alpha.changeCategory();
+         alpha.changeCategory(alphabetCounter);
       else if (menuChoice == 4)
+      {
          alpha.addCategory();
+         cout << "\nDon't forget to update syllables if needed" << endl;
+      }
       else if(menuChoice == 5)
+      {
          alpha.deleteCategory();
+         cout << "\nBe sure to update syllables if needed or else things will break" << endl;
+      }
       else if (menuChoice == 6)
          saveProject(alpha);
       else if (menuChoice == 7)
       {
-         cout << "Any unsaved progress will be lost. Would you like to save (y/n)? ";
+         cout << "Any unsaved alphabet will be lost. Would you like to save (y/n)? ";
 
          cin >> save;
          cin.clear(); 
@@ -134,10 +140,10 @@ int main()
       }
    } while (menuChoice != 7);
 
-   ++count;
+   ++sessionCounter;
 
    fout.open("counter.txt", std::ios::out); 
-   fout << count; 
+   fout << sessionCounter << endl;
    fout.close(); 
 
    return 0;
@@ -146,7 +152,7 @@ int main()
 /* GENERATE ROOTS ************************************************************
  * Purpose:
  */
-void generateRoots(Alpha alpha, string counter)
+void generateRoots(Alpha alpha, int sessionCounter, int alphabetCounter)
 {
 
    set<string> roots; // save roots to this
@@ -194,7 +200,10 @@ void generateRoots(Alpha alpha, string counter)
       cout << endl;
    }
 
-   filename += counter; 
+   // saves roots in file named "root_session_(sessionCounter)_(alphabetCounter)"
+   filename += std::to_string(sessionCounter);
+   filename += "-";
+   filename += std::to_string(alphabetCounter);
    filename += ".txt";
    
    fin.open(filename.c_str());
@@ -219,26 +228,99 @@ void generateRoots(Alpha alpha, string counter)
    fout.close();
 }
 
-/* SAVE ROOTS ****************************************************************
- * Purpose: save roots to a file
- */
-void saveRoots()
-{
-
-}
-
 /* LOAD PROJECT **************************************************************
- * Purpose: load a project from text files
+ * Purpose: load a project from text file
  */
 Alpha loadProject()
 {
-   
+   Alpha alpha; // save input here 
+   char key = 'X';
+   string longTemp = "";
+   string temp = ""; 
+   vector<string> letters; 
+   bool repeat = true; // for the do-while
+   char retry = 'n'; // for if the file can't be found
+
+   ifstream fin;
+
+   do 
+   {
+      string filename = getFilename();
+
+      fin.open(filename.c_str());
+      if (fin.is_open())
+      {
+         while (isalnum(fin.peek()))
+         { 
+            fin >> key;
+            cout << key << endl; 
+               
+            getline(fin, longTemp); 
+            cout << longTemp << endl << endl;
+
+            stringstream ss(longTemp);
+
+            while (ss >> temp)
+               letters.push_back(temp);
+
+            alpha.loadCategory(key, letters);
+
+            letters.clear(); 
+         }
+
+         repeat = false;
+         fin.close();
+      }
+      else
+      {
+         cout << "Can't open that file. Try a different file y/n? ";
+         cin >> retry;
+         cin.clear(); 
+         cin.ignore(100, '\n');
+
+         if (retry == 'n' || retry == 'N')
+         {
+            repeat = false;
+            cout << "Default values will be loaded.\n" << endl;
+         }
+      }
+   } while (repeat);
+
+   return alpha;
 }
 
 /* SAVE PROJECT **************************************************************
- * Purpose: save Alphabet and roots to separate files
+ * Purpose: save Alphabet to a file
  */
 void saveProject(Alpha alpha)
 {
-   // TODO: boolean verification of save working
+   ofstream fout; 
+
+   string filename = getFilename();
+
+   fout.open(filename.c_str());
+
+   if (fout.is_open())
+   {
+      fout << alpha;
+   }
+   else
+      cout << "Something went wrong opening the file for writing." << endl;
+
+   fout.close();
+}
+
+/* GET FILENAME **************************************************************
+ * Purpose: prompts user for a filename
+ */
+string getFilename()
+{
+   string filename = "";
+
+   cout << "Filename (do not include '.txt'): "; 
+   getline(cin, filename);
+
+   filename += ".txt";
+   
+   return filename; 
 }

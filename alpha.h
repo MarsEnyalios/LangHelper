@@ -28,8 +28,10 @@ public:
    map<char, vector<string> > getCategories(); // return entire map
    vector<string> getCategory(char key); // returns one category
 
-   void changeCategory(); // use vector insert and erase functions
+   void changeCategory(int& count2); // use vector insert and erase functions
    void addCategory(); // use map insert
+
+   void loadCategory(char key, vector<string> letters); 
 
    void deleteCategory(); // use map erase
 

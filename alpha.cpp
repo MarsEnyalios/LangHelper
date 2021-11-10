@@ -41,11 +41,11 @@ Alpha :: Alpha(map<char, vector<string> > categories)
 {
    this->categories = categories; 
    
-   this->categories['s'].push_back("cvc");
+   /*this->categories['s'].push_back("cvc");
    this->categories['s'].push_back("vcv");
    this->categories['s'].push_back("cvcc");
    this->categories['s'].push_back("vvc");
-   this->categories['s'].push_back("ccv");
+   this->categories['s'].push_back("ccv");*/
 }
 
 /* GETTERS */
@@ -63,7 +63,7 @@ vector<string> Alpha :: getCategory(char key)
 }
 
 /* ADD CATEGORY **************************************************************
- * Purpose: add a new category
+ * Purpose: add a new category from user input
  */
 void Alpha :: addCategory()
 {
@@ -81,9 +81,9 @@ void Alpha :: addCategory()
       cout << "\nReturning to main menu..." << endl; 
       return;
    }
-   else if (key == 'S')
+   else if (key == 's')
    {
-      cout << "\nS is for syllable structures and cannot be added because it cannot be removed! "
+      cout << "\ns is for syllable structures and cannot be added or removed! "
            << "Please choose something different." << endl;
    }
    else if (categories.count(key))
@@ -93,6 +93,8 @@ void Alpha :: addCategory()
       do {
          cout << "\nStart entering your letters! (0 to end)" << endl; 
          cin >> temp; 
+         cin.clear();
+         cin.ignore(100, '\n');
 
          if (temp != "0")
             letters.push_back(temp);
@@ -114,14 +116,28 @@ void Alpha :: addCategory()
    }
 }
 
+/* LOAD CATEGORY *************************************************************
+ * Purpose: add categories from a text file
+ */
+void Alpha :: loadCategory(char key, vector<string> letters)
+{
+   // erase the categeory if already existing
+   if (categories.count(key))
+        categories.erase(key);
+   
+   // insert category
+   categories.insert(std::pair<char, vector<string> >(key, letters));
+}
+
 /* CHANGE CATEGORY ***********************************************************
  * Purpose: alter a pre-existing category. User selects a category, then
  *          enters letters to add or remove.
  */
-void Alpha :: changeCategory()
+void Alpha :: changeCategory(int& count2)
 {
    char key;
    string letter;
+   char yN; 
 
    display();
 
@@ -141,7 +157,8 @@ void Alpha :: changeCategory()
       return;
    }
 
-   do {
+   do 
+   {   
       cout << "\nCombination to remove or add (0 to end): "; 
       cin >> letter;
       cin.clear(); 
@@ -155,13 +172,20 @@ void Alpha :: changeCategory()
          categories[key].push_back(letter);
 
       cout << "\nChanged alphabet: " << endl;
-      display(); 
-
+      display();
    } while (letter != "0");
+
+   cout << "\nUpdate version (e.g. 0-0 to 0-1) (y/n)? "; 
+   cin >> yN; 
+   cin.clear(); 
+   cin.ignore(100, '\n');
+
+   if (yN == 'y' || yN == 'Y')
+      ++count2;
 }
 
 /* DELETE CATEGORY ***********************************************************
- * Purpose: Deletes an entire category
+ * Purpose: Deletes an entire category based on user input
  */
 void Alpha :: deleteCategory()
 {
@@ -178,7 +202,7 @@ void Alpha :: deleteCategory()
       cout << "\nNothing deleted. Returning to main menu..." << endl;
       return; 
    }
-   else if (key == 'S' || key == 's')
+   else if (key == 's')
    {
       cout << "\nCannot delete the syllables category. Returning to main menu..." << endl;
       return; 
@@ -228,7 +252,7 @@ void Alpha :: display()
 // OPERATORS
 
 /* WRITING OPERATOR **********************************************************
- * Purpose: a writing ofstream operator
+ * Purpose: a writing ofstream operator. Outputs in the format (KEY)/n(values)
  */
 
 ostream& operator<<(ostream& os, Alpha& alpha)
@@ -240,7 +264,7 @@ ostream& operator<<(ostream& os, Alpha& alpha)
 
    for (mapIt = categories.begin(); mapIt != categories.end(); ++mapIt)
    {
-      os << mapIt->first << endl; 
+      os << mapIt->first << " "; 
       
       for (vecIt = mapIt->second.begin(); vecIt != mapIt->second.end(); ++vecIt)
          os << *vecIt << ' ';
